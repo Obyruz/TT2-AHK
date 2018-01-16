@@ -11,7 +11,7 @@ Currently Available: <br />
 -Leveling up Sword Master <br />
 -Prestige after 20 minutes <br />
 
-TO DO(huge list):
+TO DO(huge list): <br />
 -Level up skills and use them. <br />
 -Pick up pets whenever available. <br />
 -Enter tournaments. <br />
