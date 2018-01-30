@@ -205,12 +205,17 @@ FairySearch()
 	if(!ErrorLevel)
 	{
 		Click, %fairyX%, %fairyY%, 3
-		Sleep, 700
-		ImageSearch, collectX, collectY, 220, 535, 737, 552, Collect.png
-		if(!ErrorLevel)
-		{
-			Click, %collectX%, %collectY%, 3
-		}
+		Sleep, 500
+		CollectFairyReward()
+	}
+}
+
+CollectFairyReward()
+{
+	ImageSearch, collectX, collectY, 220, 534, 363, 574, *200 Collect.png
+	if(!ErrorLevel)
+	{
+		Click, %collectX%, %collectY%, 3
 	}
 }
 
