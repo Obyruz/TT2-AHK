@@ -15,6 +15,7 @@ GroupAdd, Nox, ahk_class Qt5QWindowIcon
 
 Gui,2:+AlwaysOnTop
 Gui,2:Add,Button,x10 y10 w200 h20 gStart, Tap'N'Prestige
+Gui,2:Add,Button,x10 y30 w200 h20 gFairySearch, Look For Fairy
 Gui,2:Add,Button,x10 w200 h20 g2GuiClose, Close
 Gui,2:Add,Text,, Press F11 to stop tapping.
 Gui,2:Show,x1000 y200
@@ -76,6 +77,40 @@ LoadEssentials()
 	global startTime
 	GetNoxPositions()
 	startTime = %A_TickCount%
+}
+
+LevelUpHero()
+{
+	ImageSearch, heroMenuMinimizedX, heroMenuMinimizedY, 74, 660, 125, 690, HeroMenu.jpg
+	while(!ErrorLevel)
+	{
+		ReOpenHeroMenu()
+	}
+	
+	ImageSearch, rangedHeroX, rangedHeroY, 249, 431, 268, 669, RangedHero.jpg
+	while(!ErrorLevel)
+	{
+		Send, {right}
+		Sleep, 200
+	}
+	
+	clickHeroX = %rangedHeroX%+80 
+	
+	Click, %clickHeroX%, %rangedHeroY%
+}
+
+ReOpenHeroMenu()
+{
+	global elapsedTime
+	global startTime
+	
+	Click, 100, 679
+	Sleep, 500
+	
+	elapsedTime = 0
+	startTime = %A_TickCount%
+	
+	LevelUpHero()
 }
 
 LevelUpSwordMaster()
@@ -153,6 +188,15 @@ Tap()
 	Sleep, 500
 }
 
+FairySearch()
+{
+	PixelSearch, fairyX, fairyY, 5, 79, 386, 228, 0xFF3F31, , RGB FAST
+	if(!ErrorLevel)
+	{
+		Click, %fairyX%, %fairyY%, 3
+	}
+}
+
 Start()
 {
 	global loopbreak
@@ -164,7 +208,7 @@ Start()
 		{
 			Tap()
 			LevelUpSwordMaster()
-
+			FairySearch()
 			if(TimeToPrestige())
 			{
 				Prestige()
