@@ -15,7 +15,6 @@ GroupAdd, Nox, ahk_class Qt5QWindowIcon
 
 Gui,2:+AlwaysOnTop
 Gui,2:Add,Button,x10 y10 w200 h20 gStart, Tap'N'Prestige
-Gui,2:Add,Button,x10 y30 w200 h20 gFairySearch, Look For Fairy
 Gui,2:Add,Button,x10 w200 h20 g2GuiClose, Close
 Gui,2:Add,Text,, Press F11 to stop tapping.
 Gui,2:Show,x1000 y200
@@ -115,12 +114,13 @@ ReOpenHeroMenu()
 
 LevelUpSwordMaster()
 {
-	ImageSearch, swordMenuMinimizedX, swordMenuMinimizedY, 5, 664, 60, 689, SwordMenuMinimized.png
-	while(!ErrorLevel)
+	ImageSearch, buyMaxX, buyMaxY, 280, 249, 390, 467, BUYMax.png
+	if(ErrorLevel)
 	{
-		ReOpenSwordMasterMenu()
+		Click, 32, 672
+		Sleep, 500
 		Send, {down}
-		Sleep, 2000
+		Sleep, 1000
 	}
 
 	Click, 330, 510
@@ -161,6 +161,17 @@ Prestige()
 	Click, %prestigeX%, %prestigeY%
 	Sleep, 10000
 	
+	ImageSearch, prestigeX, prestigeY, 139, 522, 261, 569, *200 Prestige.png
+	while(ErrorLevel)
+	{
+		ImageSearch, prestigeX, prestigeY, 139, 522, 261, 569, *200 Prestige.png
+		Click, %prestigeX%, %prestigeY%
+		Sleep, 1000
+		ImageSearch, prestigeX, prestigeY, 210, 444, 331, 495, *200 ConfirmPrestige.png
+		Click, %prestigeX%, %prestigeY%
+		Sleep, 10000
+	}
+	
 	prestigeX = 0
 	prestigeY = 0
 	ReOpenSwordMasterMenu()
@@ -174,7 +185,7 @@ ReOpenSwordMasterMenu()
 	Click, 32, 672
 	Sleep, 500
 	Send, {down}
-	Sleep, 2000
+	Sleep, 1000
 	
 	elapsedTime = 0
 	startTime = %A_TickCount%
@@ -194,6 +205,12 @@ FairySearch()
 	if(!ErrorLevel)
 	{
 		Click, %fairyX%, %fairyY%, 3
+		Sleep, 700
+		ImageSearch, collectX, collectY, 220, 535, 737, 552, Collect.png
+		if(!ErrorLevel)
+		{
+			Click, %collectX%, %collectY%, 3
+		}
 	}
 }
 
