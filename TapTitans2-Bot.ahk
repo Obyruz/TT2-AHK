@@ -15,6 +15,7 @@ GroupAdd, Nox, ahk_class Qt5QWindowIcon
 
 Gui,2:+AlwaysOnTop
 Gui,2:Add,Button,x10 y10 w200 h20 gStart, Tap'N'Prestige
+Gui,2:Add,Button,x10 y30 w200 h20 gTest, Control Click
 Gui,2:Add,Button,x10 w200 h20 g2GuiClose, Close
 Gui,2:Add,Text,, Press F11 to stop tapping.
 Gui,2:Show,x1000 y200
@@ -30,16 +31,21 @@ loopbreak = 0
 startTime = 0
 elapsedTime = 0
 
+/*
 F11::
 {
 	global loopbreak
 	
 	if(loopbreak == 0)
+	{
 		loopbreak = 1
+	}
 	else
+	{
 		loopbreak = 0
+	}
 }
-
+*/
 VerifyIfNoxIsOpen()
 {
 	if(WinExist("ahk_group Nox"))
@@ -78,51 +84,84 @@ LoadEssentials()
 	startTime = %A_TickCount%
 }
 
-LevelUpHero()
+LevelUpHeroes()
 {
-	ImageSearch, heroMenuMinimizedX, heroMenuMinimizedY, 74, 660, 125, 690, HeroMenu.jpg
-	while(!ErrorLevel)
-	{
-		ReOpenHeroMenu()
-	}
+	global startTime
+	global elapsedTime
+	elapsedTime := A_TickCount - startTime
 	
-	ImageSearch, rangedHeroX, rangedHeroY, 249, 431, 268, 669, RangedHero.jpg
-	while(!ErrorLevel)
+	Sleep, 200
+	
+	if(Mod(elapsedTime, 600000) < 7500)
 	{
-		Send, {right}
+		ImageSearch, heroMenuMinimizedX, heroMenuMinimizedY, 74, 660, 111, 688, *100 HeroesMenu.png
+		while(!ErrorLevel)
+		{
+			Sleep, 100
+			Click, 100, 679
+			Sleep, 500
+			ImageSearch, heroMenuMinimizedX, heroMenuMinimizedY, 74, 660, 111, 688, *100 HeroesMenu.png
+		}
+		
+		Tap()
+	/*	
+		new hero color: 0xF9AB08 
+		grayed out hero: 0x969696 
+		same as above, just the darker part: 0x494949
+		first hero coords(rectangle): 277, 482, 389, 530
+	*/
+		
+		ImageSearch, endOfMenuX, endOfMenuY, 3, 627, 396, 689, EndOfMenu.png
+		while(ErrorLevel)
+		{
+			Click, 337, 510
+			Sleep, 400
+			Send, {T}
+			ImageSearch, endOfMenuX, endOfMenuY, 3, 627, 396, 689, EndOfMenu.png
+		}
+		
 		Sleep, 200
+		Click, 337, 559
+		Sleep, 200
+		Click, 337, 621
+		Sleep, 200
+		
+		ImageSearch, buyMaxX, buyMaxY, 280, 249, 390, 467, *100 BUYMax.png
+		while(ErrorLevel)
+		{
+			Send, {down}
+			Sleep, 1000
+			ImageSearch, buyMaxX, buyMaxY, 280, 249, 390, 467, *100 BUYMax.png
+		}
 	}
-	
-	clickHeroX = %rangedHeroX%+80 
-	
-	Click, %clickHeroX%, %rangedHeroY%
 }
 
 ReOpenHeroMenu()
 {
-	global elapsedTime
-	global startTime
-	
-	Click, 100, 679
+	Click, 100, 679	
 	Sleep, 500
 	
-	elapsedTime = 0
-	startTime = %A_TickCount%
-	
-	LevelUpHero()
+	LevelUpHeroes()
 }
 
 LevelUpSwordMaster()
 {
-	ImageSearch, buyMaxX, buyMaxY, 280, 249, 390, 467, BUYMax.png
-	if(ErrorLevel)
+	ImageSearch, swordMenuMinimizedX, swordMenuMinimizedY, 5, 652, 59, 691, *100 SwordMenuMinimized.png
+	while(!ErrorLevel)
 	{
 		Click, 32, 672
 		Sleep, 500
+		ImageSearch, swordMenuMinimizedX, swordMenuMinimizedY, 5, 652, 59, 691, *100 SwordMenuMinimized.png
+	}
+	
+	ImageSearch, buyMaxX, buyMaxY, 280, 249, 390, 467, *100 BUYMax.png
+	while(ErrorLevel)
+	{
 		Send, {down}
 		Sleep, 1000
+		ImageSearch, buyMaxX, buyMaxY, 280, 249, 390, 467, *100 BUYMax.png
 	}
-
+	
 	Click, 330, 510
 }
 
@@ -133,7 +172,7 @@ TimeToPrestige()
 	
 	elapsedTime := A_TickCount - startTime
 	
-	if(elapsedTime > 1200000)
+	if(elapsedTime > 5400000)
 	{
 		return 1
 	}
@@ -142,6 +181,8 @@ TimeToPrestige()
 
 Prestige()
 {
+	LevelUpSwordMaster()
+	Sleep, 500
 	SendInput, {Up}
 	Sleep, 3000
 	ImageSearch, prestigeX, prestigeY, 245, 565, 393, 658, *200 OpenPrestigeMenu.png
@@ -162,7 +203,7 @@ Prestige()
 	Sleep, 10000
 	
 	ImageSearch, prestigeX, prestigeY, 139, 522, 261, 569, *200 Prestige.png
-	while(ErrorLevel)
+	while(!ErrorLevel)
 	{
 		ImageSearch, prestigeX, prestigeY, 139, 522, 261, 569, *200 Prestige.png
 		Click, %prestigeX%, %prestigeY%
@@ -201,11 +242,12 @@ Tap()
 
 FairySearch()
 {
-	PixelSearch, fairyX, fairyY, 5, 79, 386, 228, 0xFF3F31, , RGB FAST
+	PixelSearch, fairyX, fairyY, 68, 110, 386, 228, 0xFF3F31, , RGB FAST
 	if(!ErrorLevel)
 	{
 		Click, %fairyX%, %fairyY%, 3
-		Sleep, 500
+		Tap()
+		Sleep, 2500
 		CollectFairyReward()
 	}
 }
@@ -219,6 +261,28 @@ CollectFairyReward()
 	}
 }
 
+VerifyEgg()
+{
+	ImageSearch, eggX, eggY, 2, 240, 50, 289, *50 Egg.png
+	if(!ErrorLevel)
+	{
+		Click, %eggX%, %eggY%, 3
+		
+		Sleep, 500
+		Click, 198, 344, 20
+		Sleep, 500
+		Click, 198, 344, 20
+		Sleep, 500
+		Click, 198, 344, 20
+		Sleep, 500
+		Click, 198, 344, 20
+		Sleep, 500
+		Click, 198, 344, 20
+		Sleep, 500
+		Click, 198, 344, 20		
+	}
+}
+
 Start()
 {
 	global loopbreak
@@ -226,26 +290,26 @@ Start()
 	LoadEssentials()
 	while(true)
 	{
-		if(loopbreak < 1 and WinActive("ahk_group Nox"))
+		if(WinActive("ahk_group Nox"))
 		{
+			VerifyEgg()
 			Tap()
 			LevelUpSwordMaster()
+			
+			LevelUpHeroes()
+			
 			FairySearch()
 			if(TimeToPrestige())
 			{
 				Prestige()
 			}
 		}
-		else if(not WinActive("ahk_group Nox"))
-		{
-			MakeNoxActiveWindow()
-		}
 		else
 		{
-			Sleep, 500
+			MakeNoxActiveWindow()
 		}
 	}
 }
 
-
-*ESC::ExitApp
+F11::Pause
+Esc::ExitApp
