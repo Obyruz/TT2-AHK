@@ -24,3 +24,5 @@ TO DO(huge list): <br />
 -GUI field for easier editable prestige timer. <br />
 -Making sure it never gets stuck. <br />
 -Things that I can't remember right now. <br />
+
+[![HitCount](http://hits.dwyl.io/Obyruz/TT2-AHK.svg)](http://hits.dwyl.io/Obyruz/TT2-AHK)
