@@ -1,12 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <Root>
-    <Scene height="660" horizonFlag="0" rotateAngle="0" width="396" id="com.gamehivecorp.taptitans2" opacity="0">
-        <Item height="70" type="10" width="120" pos="147,269" strike_count="20">
-            <Key value="32">
-                <Point>208,304</Point>
-            </Key>
-        </Item>
-        <Item height="50" type="1" finger_count="1" width="70" pos="135,-7">
+    <Scene width="396" id="com.gamehivecorp.taptitans2" opacity="0" horizonFlag="0" height="660" rotateAngle="0">
+        <Item type="1" width="70" finger_count="1" height="50" pos="135,-7">
             <Key value="38">
                 <Point>172,609</Point>
                 <Point>172,608</Point>
@@ -310,42 +305,7 @@
                 <Point>160,18</Point>
             </Key>
         </Item>
-        <Item height="50" type="1" finger_count="1" width="70" pos="122,814">
-            <Key value="39">
-                <Point>133,414</Point>
-                <Point>133,415</Point>
-                <Point>133,416</Point>
-                <Point>134,417</Point>
-                <Point>134,421</Point>
-                <Point>135,424</Point>
-                <Point>136,431</Point>
-                <Point>136,439</Point>
-                <Point>137,451</Point>
-                <Point>137,465</Point>
-                <Point>137,485</Point>
-                <Point>137,507</Point>
-                <Point>138,537</Point>
-                <Point>138,567</Point>
-                <Point>138,600</Point>
-                <Point>139,628</Point>
-                <Point>139,650</Point>
-                <Point>139,672</Point>
-                <Point>139,688</Point>
-                <Point>140,708</Point>
-                <Point>140,727</Point>
-                <Point>140,744</Point>
-                <Point>143,757</Point>
-                <Point>144,774</Point>
-                <Point>145,787</Point>
-                <Point>146,800</Point>
-                <Point>147,811</Point>
-                <Point>147,820</Point>
-                <Point>147,830</Point>
-                <Point>147,836</Point>
-                <Point>147,839</Point>
-            </Key>
-        </Item>
-        <Item height="50" type="1" finger_count="1" width="70" pos="52,849">
+        <Item type="1" width="70" finger_count="1" height="50" pos="52,849">
             <Key value="40">
                 <Point>134,416</Point>
                 <Point>134,419</Point>
@@ -370,6 +330,187 @@
                 <Point>74,874</Point>
                 <Point>76,874</Point>
                 <Point>77,874</Point>
+            </Key>
+        </Item>
+        <Item type="1" width="70" finger_count="1" height="50" pos="54,536">
+            <Key value="39">
+                <Point>82,487</Point>
+                <Point>82,488</Point>
+                <Point>82,489</Point>
+                <Point>82,490</Point>
+                <Point>82,491</Point>
+                <Point>82,492</Point>
+                <Point>82,493</Point>
+                <Point>82,494</Point>
+                <Point>82,495</Point>
+                <Point>82,496</Point>
+                <Point>82,498</Point>
+                <Point>82,499</Point>
+                <Point>82,500</Point>
+                <Point>82,501</Point>
+                <Point>82,502</Point>
+                <Point>82,503</Point>
+                <Point>82,504</Point>
+                <Point>82,505</Point>
+                <Point>82,506</Point>
+                <Point>82,507</Point>
+                <Point>83,508</Point>
+                <Point>83,509</Point>
+                <Point>83,510</Point>
+                <Point>83,511</Point>
+                <Point>83,512</Point>
+                <Point>83,513</Point>
+                <Point>83,514</Point>
+                <Point>83,515</Point>
+                <Point>83,516</Point>
+                <Point>83,517</Point>
+                <Point>83,518</Point>
+                <Point>83,519</Point>
+                <Point>83,520</Point>
+                <Point>83,521</Point>
+                <Point>82,522</Point>
+                <Point>82,524</Point>
+                <Point>82,525</Point>
+                <Point>82,526</Point>
+                <Point>82,528</Point>
+                <Point>82,530</Point>
+                <Point>81,531</Point>
+                <Point>81,532</Point>
+                <Point>81,533</Point>
+                <Point>81,534</Point>
+                <Point>80,535</Point>
+                <Point>80,537</Point>
+                <Point>80,538</Point>
+                <Point>80,539</Point>
+                <Point>79,540</Point>
+                <Point>79,541</Point>
+                <Point>79,542</Point>
+                <Point>79,543</Point>
+                <Point>79,544</Point>
+                <Point>79,545</Point>
+                <Point>79,546</Point>
+                <Point>79,547</Point>
+                <Point>78,547</Point>
+                <Point>78,548</Point>
+                <Point>78,549</Point>
+                <Point>78,550</Point>
+                <Point>78,551</Point>
+                <Point>78,552</Point>
+                <Point>78,553</Point>
+                <Point>78,554</Point>
+                <Point>78,555</Point>
+                <Point>78,556</Point>
+                <Point>79,556</Point>
+                <Point>79,557</Point>
+                <Point>79,558</Point>
+                <Point>79,559</Point>
+                <Point>79,560</Point>
+                <Point>79,561</Point>
+            </Key>
+        </Item>
+        <Item type="1" width="70" finger_count="1" height="50" pos="5,47">
+            <Key value="9">
+                <Point>30,72</Point>
+            </Key>
+        </Item>
+        <Item type="10" width="120" strike_count="20" height="70" pos="147,269">
+            <Key value="32">
+                <Point>208,304</Point>
+            </Key>
+        </Item>
+        <Item type="1" width="70" finger_count="1" height="50" pos="201,507">
+            <Key value="37">
+                <Point>227,567</Point>
+                <Point>227,566</Point>
+                <Point>227,565</Point>
+                <Point>227,564</Point>
+                <Point>228,564</Point>
+                <Point>228,563</Point>
+                <Point>228,562</Point>
+                <Point>228,561</Point>
+                <Point>228,560</Point>
+                <Point>228,559</Point>
+                <Point>228,558</Point>
+                <Point>228,557</Point>
+                <Point>228,556</Point>
+                <Point>228,555</Point>
+                <Point>228,554</Point>
+                <Point>228,553</Point>
+                <Point>228,552</Point>
+                <Point>227,552</Point>
+                <Point>227,551</Point>
+                <Point>227,550</Point>
+                <Point>227,549</Point>
+                <Point>226,549</Point>
+                <Point>226,548</Point>
+                <Point>226,547</Point>
+                <Point>226,546</Point>
+                <Point>226,545</Point>
+                <Point>226,544</Point>
+                <Point>226,543</Point>
+                <Point>226,542</Point>
+                <Point>226,541</Point>
+                <Point>226,540</Point>
+                <Point>226,539</Point>
+                <Point>226,538</Point>
+                <Point>226,537</Point>
+                <Point>226,536</Point>
+                <Point>226,535</Point>
+                <Point>226,534</Point>
+                <Point>226,533</Point>
+                <Point>226,532</Point>
+            </Key>
+        </Item>
+        <Item type="1" width="70" finger_count="1" height="50" pos="240,510">
+            <Key value="84">
+                <Point>265,582</Point>
+                <Point>265,581</Point>
+                <Point>265,580</Point>
+                <Point>265,579</Point>
+                <Point>265,578</Point>
+                <Point>265,577</Point>
+                <Point>265,576</Point>
+                <Point>265,575</Point>
+                <Point>265,574</Point>
+                <Point>265,573</Point>
+                <Point>265,572</Point>
+                <Point>265,571</Point>
+                <Point>265,570</Point>
+                <Point>265,569</Point>
+                <Point>265,568</Point>
+                <Point>265,567</Point>
+                <Point>265,566</Point>
+                <Point>265,565</Point>
+                <Point>265,564</Point>
+                <Point>265,563</Point>
+                <Point>265,562</Point>
+                <Point>265,561</Point>
+                <Point>265,560</Point>
+                <Point>265,559</Point>
+                <Point>265,558</Point>
+                <Point>265,557</Point>
+                <Point>265,556</Point>
+                <Point>265,555</Point>
+                <Point>265,554</Point>
+                <Point>265,553</Point>
+                <Point>265,552</Point>
+                <Point>265,551</Point>
+                <Point>265,550</Point>
+                <Point>265,549</Point>
+                <Point>265,548</Point>
+                <Point>265,547</Point>
+                <Point>265,546</Point>
+                <Point>265,545</Point>
+                <Point>265,544</Point>
+                <Point>265,543</Point>
+                <Point>265,542</Point>
+                <Point>265,541</Point>
+                <Point>265,540</Point>
+                <Point>265,539</Point>
+                <Point>265,538</Point>
+                <Point>265,537</Point>
+                <Point>265,536</Point>
+                <Point>265,535</Point>
             </Key>
         </Item>
     </Scene>
