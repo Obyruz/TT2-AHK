@@ -5,7 +5,7 @@ CoordMode, Pixel, relative
 DetectHiddenWindows, On
 SetTitleMatchMode, 2
 #WinActivateForce
-SetControlDelay 1
+SetControlDelay -1
 SetWinDelay 0
 SetKeyDelay -1
 SetMouseDelay -1
@@ -15,7 +15,10 @@ GroupAdd, Nox, ahk_class Qt5QWindowIcon
 
 Gui,2:+AlwaysOnTop
 Gui,2:Add,Button,x10 y10 w200 h20 gStart, Tap'N'Prestige
-Gui,2:Add,Button,x10 y30 w200 h20 gTest, Control Click
+;Gui,2:Add,Button,x10 y30 w200 h20 gTest, CtlTest
+;Gui,2:Add,Edit, x10 y50 w200 h20 Number
+;Gui,2:Add,UpDown, vResetTime Range1-300, 90
+Gui,2:Add,Button,x10 y70 w200 h20 g2GuiSave, Save
 Gui,2:Add,Button,x10 w200 h20 g2GuiClose, Close
 Gui,2:Add,Text,, Press F11 to stop tapping.
 Gui,2:Show,x1000 y200
@@ -24,6 +27,9 @@ return
 2GuiClose:
 	ExitApp
 	
+2GuiSave:
+	Gui,2:Submit, Nohide
+
 Find_Image:
 	return
 
@@ -73,7 +79,7 @@ GetNoxPositions()
 		Sleep, 500
 		WinGetPos, topLeftX, topLeftY, width, height, ahk_group Nox
 		Sleep, 500
-		Click, 232, 335
+		ControlClick, x232 y335, ahk_group Nox, , Left, 1, NA
 	}
 }
 
@@ -98,8 +104,8 @@ LevelUpHeroes()
 		while(!ErrorLevel)
 		{
 			Sleep, 100
-			Click, 100, 679
-			Sleep, 500
+			ControlClick, x100 y679, ahk_group Nox, , Left, 1, NA
+			Sleep, 1000
 			ImageSearch, heroMenuMinimizedX, heroMenuMinimizedY, 74, 660, 111, 688, *100 HeroesMenu.png
 		}
 		
@@ -114,21 +120,29 @@ LevelUpHeroes()
 		ImageSearch, endOfMenuX, endOfMenuY, 3, 627, 396, 689, EndOfMenu.png
 		while(ErrorLevel)
 		{
-			Click, 337, 510
+			ControlClick, x337 y510, ahk_group Nox, , Left, 1, NA
 			Sleep, 400
+			if(!WinActive("ahk_group Nox"))
+			{
+				MakeNoxActiveWindow()
+			}
 			Send, {T}
 			ImageSearch, endOfMenuX, endOfMenuY, 3, 627, 396, 689, EndOfMenu.png
 		}
 		
 		Sleep, 200
-		Click, 337, 559
+		ControlClick, x337 y559, ahk_group Nox, , Left, 1, NA
 		Sleep, 200
-		Click, 337, 621
+		ControlClick, x337 y621, ahk_group Nox, , Left, 1, NA
 		Sleep, 200
 		
 		ImageSearch, buyMaxX, buyMaxY, 280, 249, 390, 467, *100 BUYMax.png
 		while(ErrorLevel)
 		{
+			if(!WinActive("ahk_group Nox"))
+			{
+				MakeNoxActiveWindow()
+			}
 			Send, {down}
 			Sleep, 1000
 			ImageSearch, buyMaxX, buyMaxY, 280, 249, 390, 467, *100 BUYMax.png
@@ -138,7 +152,7 @@ LevelUpHeroes()
 
 ReOpenHeroMenu()
 {
-	Click, 100, 679	
+	ControlClick, x100 y679, ahk_group Nox, , Left, 1, NA
 	Sleep, 500
 	
 	LevelUpHeroes()
@@ -149,7 +163,7 @@ LevelUpSwordMaster()
 	ImageSearch, swordMenuMinimizedX, swordMenuMinimizedY, 5, 652, 59, 691, *100 SwordMenuMinimized.png
 	while(!ErrorLevel)
 	{
-		Click, 32, 672
+		ControlClick, x32 y672, ahk_group Nox, , Left, 1, NA
 		Sleep, 500
 		ImageSearch, swordMenuMinimizedX, swordMenuMinimizedY, 5, 652, 59, 691, *100 SwordMenuMinimized.png
 	}
@@ -157,12 +171,16 @@ LevelUpSwordMaster()
 	ImageSearch, buyMaxX, buyMaxY, 280, 249, 390, 467, *100 BUYMax.png
 	while(ErrorLevel)
 	{
+		if(!WinActive("ahk_group Nox"))
+		{
+			MakeNoxActiveWindow()
+		}
 		Send, {down}
 		Sleep, 1000
 		ImageSearch, buyMaxX, buyMaxY, 280, 249, 390, 467, *100 BUYMax.png
 	}
 	
-	Click, 330, 510
+	ControlClick, x330 y510, ahk_group Nox, , Left, 1, NA
 }
 
 TimeToPrestige()
@@ -172,7 +190,7 @@ TimeToPrestige()
 	
 	elapsedTime := A_TickCount - startTime
 	
-	if(elapsedTime > 5400000)
+	if(elapsedTime > 5000000)
 	{
 		return 1
 	}
@@ -183,33 +201,42 @@ Prestige()
 {
 	LevelUpSwordMaster()
 	Sleep, 500
+	if(!WinActive("ahk_group Nox"))
+	{
+		MakeNoxActiveWindow()
+	}
 	SendInput, {Up}
 	Sleep, 3000
 	ImageSearch, prestigeX, prestigeY, 245, 565, 393, 658, *200 OpenPrestigeMenu.png
 
-	if(%prestigeX% == 0 or %prestigeY% == 0)
+	while(ErrorLevel)
 	{
-		Sleep, 1000
-		Prestige()
+		if(!WinActive("ahk_group Nox"))
+		{
+			MakeNoxActiveWindow()
+		}
+		SendInput, {Up}
+		Sleep, 3000
+		ImageSearch, prestigeX, prestigeY, 245, 565, 393, 658, *200 OpenPrestigeMenu.png
 	}
 
-	Click, %prestigeX%, %prestigeY%
+	ControlClick, x%prestigeX% y%prestigeY%, ahk_group Nox, , Left, 1, NA
 	Sleep, 1000
 	ImageSearch, prestigeX, prestigeY, 139, 522, 261, 569, *200 Prestige.png
-	Click, %prestigeX%, %prestigeY%
+	ControlClick, x%prestigeX% y%prestigeY%, ahk_group Nox, , Left, 1, NA
 	Sleep, 1000
 	ImageSearch, prestigeX, prestigeY, 210, 444, 331, 495, *200 ConfirmPrestige.png
-	Click, %prestigeX%, %prestigeY%
+	ControlClick, x%prestigeX% y%prestigeY%, ahk_group Nox, , Left, 1, NA
 	Sleep, 10000
 	
 	ImageSearch, prestigeX, prestigeY, 139, 522, 261, 569, *200 Prestige.png
 	while(!ErrorLevel)
 	{
 		ImageSearch, prestigeX, prestigeY, 139, 522, 261, 569, *200 Prestige.png
-		Click, %prestigeX%, %prestigeY%
+		ControlClick, x%prestigeX% y%prestigeY%, ahk_group Nox, , Left, 1, NA
 		Sleep, 1000
 		ImageSearch, prestigeX, prestigeY, 210, 444, 331, 495, *200 ConfirmPrestige.png
-		Click, %prestigeX%, %prestigeY%
+		ControlClick, x%prestigeX% y%prestigeY%, ahk_group Nox, , Left, 1, NA
 		Sleep, 10000
 	}
 	
@@ -223,8 +250,12 @@ ReOpenSwordMasterMenu()
 	global elapsedTime
 	global startTime
 	
-	Click, 32, 672
+	ControlClick, x32 y672, ahk_group Nox, , Left, 1, NA
 	Sleep, 500
+	if(!WinActive("ahk_group Nox"))
+	{
+		MakeNoxActiveWindow()
+	}
 	Send, {down}
 	Sleep, 1000
 	
@@ -236,16 +267,22 @@ ReOpenSwordMasterMenu()
 
 Tap()
 {
+	if(!WinActive("ahk_group Nox"))
+	{
+		MakeNoxActiveWindow()
+	}
 	Send, {Space}
 	Sleep, 500
 }
 
 FairySearch()
 {
-	PixelSearch, fairyX, fairyY, 68, 110, 386, 228, 0xFF3F31, , RGB FAST
+	;0x8A1B52 -> valentine fairy
+	;0xFF3F31 -> normal fairy
+	PixelSearch, fairyX, fairyY, 68, 110, 386, 228, 0x8A1B52, , RGB FAST
 	if(!ErrorLevel)
 	{
-		Click, %fairyX%, %fairyY%, 3
+		ControlClick, x%fairyX% y%fairyY%, ahk_group Nox, , Left, 3, NA
 		Tap()
 		Sleep, 2500
 		CollectFairyReward()
@@ -257,7 +294,7 @@ CollectFairyReward()
 	ImageSearch, collectX, collectY, 220, 534, 363, 574, *200 Collect.png
 	if(!ErrorLevel)
 	{
-		Click, %collectX%, %collectY%, 3
+		ControlClick, x%collectX% y%collectY%, ahk_group Nox, , Left, 3, NA
 	}
 }
 
@@ -266,20 +303,20 @@ VerifyEgg()
 	ImageSearch, eggX, eggY, 2, 240, 50, 289, *50 Egg.png
 	if(!ErrorLevel)
 	{
-		Click, %eggX%, %eggY%, 3
+		ControlClick, x%eggX% y%eggY%, ahk_group Nox, , Left, 3, NA
 		
-		Sleep, 500
-		Click, 198, 344, 20
-		Sleep, 500
-		Click, 198, 344, 20
-		Sleep, 500
-		Click, 198, 344, 20
-		Sleep, 500
-		Click, 198, 344, 20
-		Sleep, 500
-		Click, 198, 344, 20
-		Sleep, 500
-		Click, 198, 344, 20		
+		Sleep, 1000
+		ControlClick, x198 y344, ahk_group Nox, , Left, 20, NA
+		Sleep, 1000
+		ControlClick, x198 y344, ahk_group Nox, , Left, 20, NA
+		Sleep, 1000
+		ControlClick, x198 y344, ahk_group Nox, , Left, 20, NA
+		Sleep, 1000
+		ControlClick, x198 y344, ahk_group Nox, , Left, 20, NA
+		Sleep, 1000
+		ControlClick, x198 y344, ahk_group Nox, , Left, 20, NA
+		Sleep, 1000
+		ControlClick, x198 y344, ahk_group Nox, , Left, 20, NA	
 	}
 }
 
@@ -290,25 +327,29 @@ Start()
 	LoadEssentials()
 	while(true)
 	{
-		if(WinActive("ahk_group Nox"))
+		VerifyEgg()
+		Tap()
+		LevelUpSwordMaster()
+		
+		LevelUpHeroes()
+		
+		FairySearch()
+		if(TimeToPrestige())
 		{
-			VerifyEgg()
-			Tap()
-			LevelUpSwordMaster()
-			
-			LevelUpHeroes()
-			
-			FairySearch()
-			if(TimeToPrestige())
-			{
-				Prestige()
-			}
-		}
-		else
-		{
-			MakeNoxActiveWindow()
+			Prestige()
 		}
 	}
+}
+
+Test()
+{
+	global ResetTime
+	MsgBox, %ResetTime%
+	;ControlClick, x214 y344, ahk_group Nox, , Left, 20, NA
+	;ControlClick, x263 y550, ahk_group Nox, , Left, 1, NA
+	;Sleep, 300
+	;ControlClick, x263 y490, ahk_group Nox, , Left, 1, NA
+	;ControlSend, ahk_parent, T, ahk_group Nox
 }
 
 F11::Pause
