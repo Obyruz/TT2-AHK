@@ -16,12 +16,12 @@ Currently Available: <br />
 -Pick up pets whenever available. <br />
 -Prestige after 20 minutes <br />
 -Click on fairies and collect rewards(for those with skippable option available) <br />
+-Add a checkbox if the user doesn't want to click on fairies(for those without skippable option) <br />
+-GUI field for easier editable prestige timer. <br />
 
 TO DO(huge list): <br />
 -Level up skills and use them. <br />
 -Enter tournaments. <br />
--Add a checkbox if the user doesn't want to click on fairies(for those without skippable option) <br />
--GUI field for easier editable prestige timer. <br />
 -Making sure it never gets stuck. <br />
 -Things that I can't remember right now. <br />
 
