@@ -14,44 +14,36 @@ SetBatchLines -1
 GroupAdd, Nox, ahk_class Qt5QWindowIcon
 
 Gui,2:+AlwaysOnTop
-Gui,2:Add,Button,x10 y10 w200 h20 gStart, Tap'N'Prestige
-;Gui,2:Add,Button,x10 y30 w200 h20 gTest, CtlTest
-Gui,2:Add,Edit, x10 y50 w200 h20 Number
-Gui,2:Add,UpDown, vResetTime Range1-300, 90
-Gui,2:Add,Button,x10 y70 w200 h20 g2GuiSave, Save
-Gui,2:Add,Button,x10 w200 h20 g2GuiClose, Close
-Gui,2:Add,Text,, Press F11 to stop tapping.
+Gui,2:Add,Button,x30 y10 w200 h20 gStart, Tap'N'Prestige
+Gui,2:Add,Text, x10 y50, Minutes between prestiges:
+Gui,2:Add,Edit, x200 y48 w50 h20 Number
+Gui,2:Add,UpDown, vResetTime Range1-300, 60
+Gui,2:Add,Text, x10 y70, Minutes between leveling all heroes:
+Gui,2:Add,Edit, x200 y68 w50 h20 Number
+Gui,2:Add,UpDown, vHeroesTimer Range1-300, 10
+Gui,2:Add,Text, x10 y90, Minutes between leveling sword master:
+Gui,2:Add,Edit, x200 y88 w50 h20 Number
+Gui,2:Add,UpDown, vSwordMasterTimer Range1-300, 10
+Gui,2:Add,Text, x10 y110, Minutes between leveling best hero:
+Gui,2:Add,Edit, x200 y108 w50 h20 Number
+Gui,2:Add,UpDown, vBestHeroTimer Range0-300, 1
+Gui,2:Add,Checkbox, x10 y130 vClickClanShip, Click on Clan Ship(might click on fairy)
+Gui,2:Add,Checkbox, x10 y150 vPickFairy, Click on fairies
+;Gui,2:Add,Checkbox, x10 y170 vIdle, Run with game on background
+Gui,2:Add,Button,x30 w200 h20 g2GuiClose, Close
+
+Gui,2:Add,Text,, Press F11 to pause.
 Gui,2:Show,x1000 y200
 return
 
 2GuiClose:
 	ExitApp
-	
-2GuiSave:
-	Gui,2:Submit, Nohide
 
-Find_Image:
-	return
 
-loopbreak = 0
 startTime = 0
 elapsedTime = 0
 
-/*
-F11::
-{
-	global loopbreak
-	
-	if(loopbreak == 0)
-	{
-		loopbreak = 1
-	}
-	else
-	{
-		loopbreak = 0
-	}
-}
-*/
+
 VerifyIfNoxIsOpen()
 {
 	if(WinExist("ahk_group Nox"))
@@ -71,9 +63,26 @@ MakeNoxActiveWindow()
 	Sleep, 1000
 }
 
+VerifyActive()
+{
+	return 1
+
+/*	global Idle
+
+	if(!Idle)
+	{
+		return 1
+	}
+	else
+	{
+		return 0
+	}
+*/
+}
+
 GetNoxPositions()
 {
-	if(VerifyIfNoxIsOpen())
+	if(VerifyIfNoxIsOpen() && VerifyActive())
 	{
 		MakeNoxActiveWindow()
 		Sleep, 500
@@ -90,24 +99,35 @@ LoadEssentials()
 	startTime = %A_TickCount%
 }
 
+LevelUpBestHero()
+{
+	global BestHeroTimer
+	timeToLevelBestHero := BestHeroTimer * 60000
+	
+	if(Mod(elapsedTime, timeToLevelBestHero) < 5000)
+	{
+		ReOpenHeroesMenu()
+		
+		ControlClick, x407 y685, ahk_group Nox, , Left, 1, NA
+	}
+}
+
 LevelUpHeroes()
 {
 	global startTime
 	global elapsedTime
+	global HeroesTimer
 	elapsedTime := A_TickCount - startTime
-	
+	timeToLevelHeroes := HeroesTimer * 60000
+
 	Sleep, 200
 	
-	if(Mod(elapsedTime, 600000) < 7500)
+	ReOpenHeroesMenu()
+	
+	ControlClick, x407 y685, ahk_group Nox, , Left, 1, NA
+	
+	if((Mod(elapsedTime, timeToLevelHeroes) < 7500) && VerifyActive())
 	{
-		ImageSearch, heroMenuMinimizedX, heroMenuMinimizedY, 81, 782, 162, 830, *100 HeroesMenu.png
-		while(!ErrorLevel)
-		{
-			Sleep, 100
-			ControlClick, x121 y812, ahk_group Nox, , Left, 1, NA
-			Sleep, 1000
-			ImageSearch, heroMenuMinimizedX, heroMenuMinimizedY, 81, 782, 162, 830, *50 HeroesMenu.png
-		}
 		
 		Tap()
 	/*	
@@ -149,37 +169,73 @@ LevelUpHeroes()
 	}
 }
 
-ReOpenHeroMenu()
+ReOpenHeroesMenu()
 {
-	ControlClick, x120 y814, ahk_group Nox, , Left, 1, NA
-	Sleep, 500
+	ImageSearch, heroMenuMinimizedX, heroMenuMinimizedY, 81, 782, 162, 830, *50 HeroesMenu.png
+	while(!ErrorLevel)
+	{
+		Sleep, 100
+		ControlClick, x121 y812, ahk_group Nox, , Left, 1, NA
+		Sleep, 500
+		Tap()
+		Sleep, 500
+		Tap()
+		Sleep, 500
+		ImageSearch, heroMenuMinimizedX, heroMenuMinimizedY, 81, 782, 162, 830, *50 HeroesMenu.png
+	}
 	
-	LevelUpHeroes()
+	if(VerifyActive())
+	{
+		ImageSearch, buyMaxX, buyMaxY, 331, 519, 479, 567, *100 BUYMax.png
+		while(ErrorLevel)
+		{
+			if(!WinActive("ahk_group Nox"))
+			{
+				MakeNoxActiveWindow()
+			}
+			Send, {down}
+			Sleep, 1000
+			ImageSearch, buyMaxX, buyMaxY, 331, 519, 479, 567, *100 BUYMax.png
+		}
+	}
+	
 }
 
 LevelUpSwordMaster()
 {
-	ImageSearch, swordMenuMinimizedX, swordMenuMinimizedY, 0, 793, 77, 830, *100 SwordMenuMinimized.png
-	while(!ErrorLevel)
+	global elapsedTime
+	global SwordMasterTimer
+	
+	timeToLevelSwordMaster := SwordMasterTimer * 60000
+	
+	if(Mod(elapsedTime, timeToLevelSwordMaster) < 7500)
 	{
-		ControlClick, x40 y814, ahk_group Nox, , Left, 1, NA
-		Sleep, 500
 		ImageSearch, swordMenuMinimizedX, swordMenuMinimizedY, 0, 793, 77, 830, *100 SwordMenuMinimized.png
-	}
-	
-	ImageSearch, buyMaxX, buyMaxY, 331, 519, 479, 567, *100 BUYMax.png
-	while(ErrorLevel)
-	{
-		if(!WinActive("ahk_group Nox"))
+		while(!ErrorLevel)
 		{
-			MakeNoxActiveWindow()
+			ControlClick, x40 y814, ahk_group Nox, , Left, 1, NA
+			Sleep, 500
+			Tap()
+			Sleep, 500
+			Tap()
+			Sleep, 500
+			ImageSearch, swordMenuMinimizedX, swordMenuMinimizedY, 0, 793, 77, 830, *100 SwordMenuMinimized.png
 		}
-		Send, {down}
-		Sleep, 1000
+		
 		ImageSearch, buyMaxX, buyMaxY, 331, 519, 479, 567, *100 BUYMax.png
+		while(ErrorLevel && verifyActive())
+		{
+			if(!WinActive("ahk_group Nox"))
+			{
+				MakeNoxActiveWindow()
+			}
+			Send, {down}
+			Sleep, 1000
+			ImageSearch, buyMaxX, buyMaxY, 331, 519, 479, 567, *100 BUYMax.png
+		}
+		
+		ControlClick, x409 y612, ahk_group Nox, , Left, 1, NA
 	}
-	
-	ControlClick, x409 y612, ahk_group Nox, , Left, 1, NA
 }
 
 TimeToPrestige()
@@ -189,9 +245,9 @@ TimeToPrestige()
 	global ResetTime
 	
 	elapsedTime := A_TickCount - startTime
-
-	;if(elapsedTime > (%ResetTime% * 60000))
-	if(elapsedTime > 5000000)
+	userResetTime := ResetTime * 60000
+	
+	if(elapsedTime > userResetTime)
 	{
 		return 1
 	}
@@ -200,8 +256,15 @@ TimeToPrestige()
 
 Prestige()
 {
-	LevelUpSwordMaster()
+	while(!WinActive("ahk_group Nox"))
+	{
+		SoundBeep, 500, 1000
+		Sleep, 100
+	}
+	
+	ReOpenSwordMasterMenu()
 	Sleep, 500
+	
 	if(!WinActive("ahk_group Nox"))
 	{
 		MakeNoxActiveWindow()
@@ -251,14 +314,17 @@ ReOpenSwordMasterMenu()
 	global elapsedTime
 	global startTime
 	
-	ControlClick, x38 y818, ahk_group Nox, , Left, 1, NA
-	Sleep, 500
-	if(!WinActive("ahk_group Nox"))
+	ImageSearch, swordMenuMinimizedX, swordMenuMinimizedY, 0, 793, 77, 830, *100 SwordMenuMinimized.png
+	while(!ErrorLevel)
 	{
-		MakeNoxActiveWindow()
+		ControlClick, x40 y814, ahk_group Nox, , Left, 1, NA
+		Sleep, 500
+		Tap()
+		Sleep, 500
+		Tap()
+		Sleep, 500
+		ImageSearch, swordMenuMinimizedX, swordMenuMinimizedY, 0, 793, 77, 830, *100 SwordMenuMinimized.png
 	}
-	Send, {down}
-	Sleep, 1000
 	
 	elapsedTime = 0
 	startTime = %A_TickCount%
@@ -268,25 +334,54 @@ ReOpenSwordMasterMenu()
 
 Tap()
 {
-	if(!WinActive("ahk_group Nox"))
-	{
-		MakeNoxActiveWindow()
-	}
-	Send, {Space}
+	ControlClick, x235 y439, ahk_group Nox, , Left, 20, NA
 	Sleep, 500
+}
+
+ClanShipPower()
+{
+	global ClickClanShip
+	
+	if(ClickClanShip)
+	{
+		;0xFFFFE4
+		;PixelSearch, clanShipX, clanShipY, 6, 120, 94, 149, 0xFFFFFF, , RGB FAST
+		;if(!ErrorLevel)
+		PixelSearch, fairyX, fairyY, 0, 101, 189, 221, 0x8A1B52, , RGB FAST
+		if(ErrorLevel)
+		{
+			ControlClick, x31 y138, ahk_group Nox, , Left, 1, NA
+		}
+		
+		Sleep, 3000
+		CollectFairyReward()
+	}
 }
 
 FairySearch()
 {
-	;0x8A1B52 -> valentine fairy
-	;0xFF3F31 -> normal fairy
-	PixelSearch, fairyX, fairyY, 75, 148, 475, 278, 0x8A1B52, , RGB FAST
-	if(!ErrorLevel)
+	global PickFairy
+	
+	if(PickFairy)
 	{
-		ControlClick, x%fairyX% y%fairyY%, ahk_group Nox, , Left, 3, NA
-		Tap()
-		Sleep, 2500
-		CollectFairyReward()
+		;0x8A1B52 -> valentine fairy
+		;0xFF3F31 -> normal fairy
+		PixelSearch, fairyX, fairyY, 75, 148, 475, 278, 0x8A1B52, , RGB FAST
+		if(!ErrorLevel)
+		{
+			ControlClick, x%fairyX% y%fairyY%, ahk_group Nox, , Left, 3, NA
+			Tap()
+			Sleep, 500
+			Tap()
+			Sleep, 500
+			Tap()
+			Sleep, 500
+			Tap()
+			Sleep, 500
+			Tap()
+			Sleep, 500
+			CollectFairyReward()
+		}
 	}
 }
 
@@ -296,6 +391,14 @@ CollectFairyReward()
 	while(!ErrorLevel)
 	{
 		ControlClick, x%collectX% y%collectY%, ahk_group Nox, , Left, 3, NA
+		Sleep, 500
+		Tap()
+		Sleep, 500
+		Tap()
+		Sleep, 500
+		Tap()
+		Sleep, 500
+		Tap()
 		Sleep, 500
 		ImageSearch, collectX, collectY, 262, 631, 447, 703, *200 Collect.png
 	}
@@ -309,36 +412,45 @@ VerifyEgg()
 		ControlClick, x%eggX% y%eggY%, ahk_group Nox, , Left, 3, NA
 		
 		Sleep, 1000
-		ControlClick, x235 y439, ahk_group Nox, , Left, 20, NA
-		Sleep, 1000
-		ControlClick, x235 y439, ahk_group Nox, , Left, 20, NA
-		Sleep, 1000
-		ControlClick, x235 y439, ahk_group Nox, , Left, 20, NA
-		Sleep, 1000
-		ControlClick, x235 y439, ahk_group Nox, , Left, 20, NA
-		Sleep, 1000
-		ControlClick, x235 y439, ahk_group Nox, , Left, 20, NA
-		Sleep, 1000
-		ControlClick, x235 y439, ahk_group Nox, , Left, 20, NA	
+		Tap()
+		Sleep, 500
+		Tap()
+		Sleep, 500
+		Tap()
+		Sleep, 500
+		Tap()
+		Sleep, 500
+		Tap()
+		Sleep, 500
+		Tap()
 	}
 }
 
 Start()
 {
-	global loopbreak
+	Gui,2:Submit, Nohide
 	
 	LoadEssentials()
+	
 	while(true)
 	{
+		Gui,2:Submit, Nohide
 		VerifyEgg()
+		Gui,2:Submit, Nohide
 		Tap()
+		Gui,2:Submit, Nohide
 		LevelUpSwordMaster()
-		
+		Gui,2:Submit, Nohide
+		ClanShipPower()
+		Gui,2:Submit, Nohide
 		LevelUpHeroes()
+		Gui,2:Submit, Nohide
 		
 		FairySearch()
+		Gui,2:Submit, Nohide
 		if(TimeToPrestige())
 		{
+			Gui,2:Submit, Nohide
 			Prestige()
 		}
 	}
@@ -346,8 +458,6 @@ Start()
 
 Test()
 {
-	global ResetTime
-	MsgBox, %ResetTime%
 	;ControlClick, x214 y344, ahk_group Nox, , Left, 20, NA
 	;ControlClick, x263 y550, ahk_group Nox, , Left, 1, NA
 	;Sleep, 300
@@ -356,4 +466,3 @@ Test()
 }
 
 F11::Pause
-Esc::ExitApp
