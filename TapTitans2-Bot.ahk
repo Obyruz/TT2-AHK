@@ -59,8 +59,9 @@ Gui,2:Add,UpDown, vTimesToLevelSkills Range0-300, 1
 Gui,2:Add,Text, x10 y150, BEHAVIOR
 Gui,2:Add,Checkbox, x10 y170 vClickClanShip, Click on Clan Ship(might click on fairy)
 Gui,2:Add,Checkbox, x10 y190 vPickFairy, Click on fairies
-Gui,2:Add,Checkbox, x10 y210 vDoClanQuest, Do Clan Quest whenever available
-Gui,2:Add,Button,x175 y230 w200 h30 g2GuiClose, Close
+Gui,2:Add,Checkbox, x30 y210 vWatchAD, Watch AD's
+Gui,2:Add,Checkbox, x10 y230 vDoClanQuest, Do Clan Quest whenever available
+Gui,2:Add,Button,x175 y250 w200 h30 g2GuiClose, Close
 ;Gui,2:Add,Button,x300 y210 w200 h20 g2GuiPause, Pause
 
 Gui,2:Add,Text,x10 , Press F11 to pause.
@@ -583,16 +584,55 @@ FairySearch()
 			ControlClick, x%fairyX% y%fairyY%, ahk_group Nox, , Left, 3, NA
 			Sleep, 500
 			Tap()
-			Sleep, 500			
+			Sleep, 2000		
+			WatchAdd()
 			CollectFairyReward()
 		}
+	}
+}
+
+WatchAdd()
+{
+	global WatchAD
+	CheckStageTransition()
+	ImageSearch, watchX, watchY, 100, 500, 550, 800, *100 Watch.png
+	if (!ErrorLevel)
+	{
+		if(WatchAD)
+		{
+			while(!ErrorLevel)
+			{
+				ControlClick, x%watchX% y%watchY%, ahk_group Nox, , Left, 1, NA
+				Sleep, 1500
+				ImageSearch, watchX, watchY, 100, 500, 550, 800, *100 Watch.png
+			}
+			; While?
+			Sleep, 35000
+			Send {Esc}
+		} else {
+			ControlClick, x122 y665, ahk_group Nox, , Left, 1, NA
+		}
+		Sleep, 3000	
 	}
 }
 
 CollectFairyReward()
 {
 	CheckStageTransition()
-	ImageSearch, collectX, collectY, 262, 631, 447, 703, *50 Collect.png
+	global WatchAD
+	if (WatchAD) {
+		xmin := 154
+		xmax := 330
+		ymin := 640
+		ymax := 690
+	}
+	else {
+		xmin := 262
+		xmax := 447
+		ymin := 631
+		ymax := 703
+	}
+	ImageSearch, collectX, collectY, xmin, ymin, xmax, ymax, *50 Collect.png
 	while(!ErrorLevel)
 	{
 		ControlClick, x%collectX% y%collectY%, ahk_group Nox, , Left, 3, NA
@@ -606,7 +646,7 @@ CollectFairyReward()
 		ControlClick, x384 y667, ahk_group Nox, , Left, 1, NA
 		Sleep, 500
 		CheckStageTransition()
-		ImageSearch, collectX, collectY, 262, 631, 447, 703, *50 Collect.png
+		ImageSearch, collectX, collectY, xmin, ymin, xmax, ymax, *50 Collect.png
 	}
 }
 
@@ -727,7 +767,7 @@ Start()
 	Gui,2:Submit, Nohide
 	
 	LoadEssentials()
-	
+
 	while(true)
 	{
 		VerifyEgg()
@@ -762,3 +802,4 @@ Test()
 }
 
 F11::Pause
+F10::Test()
