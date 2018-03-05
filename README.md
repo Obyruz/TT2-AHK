@@ -25,4 +25,6 @@ TO DO(huge list): <br />
 -Making sure it never gets stuck. <br />
 -Things that I can't remember right now. <br />
 
+If you have any questions or suggestions, feel free to contact me through my e-mail: obyruz@gmail.com
+
 [![HitCount](http://hits.dwyl.io/Obyruz/TT2-AHK.svg)](http://hits.dwyl.io/Obyruz/TT2-AHK)
