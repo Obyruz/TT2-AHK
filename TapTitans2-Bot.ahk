@@ -584,7 +584,7 @@ FairySearch()
 			ControlClick, x%fairyX% y%fairyY%, ahk_group Nox, , Left, 3, NA
 			Sleep, 500
 			Tap()
-			Sleep, 2000		
+			Sleep, 500		
 			WatchAdd()
 			CollectFairyReward()
 		}
@@ -603,16 +603,23 @@ WatchAdd()
 			while(!ErrorLevel)
 			{
 				ControlClick, x%watchX% y%watchY%, ahk_group Nox, , Left, 1, NA
-				Sleep, 1500
+				Sleep, 500
 				ImageSearch, watchX, watchY, 100, 500, 550, 800, *100 Watch.png
 			}
 			; While?
 			Sleep, 35000
 			Send {Esc}
+			Sleep, 5000
+			CheckStageTransition()
+			ImageSearch, ErrorWatchAdX, ErrorWatchAdY, 144, 528, 336, 597, *100 ErrorWatchAd.png
+			while(!ErrorLevel)
+			{
+				ControlClick, x245 y566, ahk_group Nox, , Left, 1, NA
+				ImageSearch, ErrorWatchAdX, ErrorWatchAdY, 144, 528, 336, 597, *100 ErrorWatchAd.png
+			}
 		} else {
 			ControlClick, x122 y665, ahk_group Nox, , Left, 1, NA
 		}
-		Sleep, 3000	
 	}
 }
 
@@ -789,6 +796,7 @@ Start()
 
 Test()
 {
+	;LevelUpSkills()
 	;while(true)
 	;{
 		;ControlClick, x214 y344, ahk_group Nox, , Left, 20, NA
